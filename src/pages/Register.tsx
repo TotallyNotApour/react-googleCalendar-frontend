@@ -1,9 +1,13 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+
 function Register() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
+
+    const navigate = useNavigate();
 
     const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -28,7 +32,8 @@ function Register() {
             const data = await response.json();
 
             console.log(data);
-
+            localStorage.setItem("token", data.token);
+            navigate("/calendar");
 
         } catch (error) {
             console.error("Register failed:", error);
