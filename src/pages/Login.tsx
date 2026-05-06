@@ -33,9 +33,11 @@ function Login() {
     }
 
     return (
-        <div>
+        <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
             <div>
-                <h1>Login</h1>
+                <h1>
+                    Login
+                </h1>
 
                 <form onSubmit={handleSubmit}> 
                     <input
