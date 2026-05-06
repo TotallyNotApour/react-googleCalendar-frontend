@@ -8,7 +8,7 @@ export default {
       colors: {
         primary: "var(--primary-color)",
         secondary: "var(--secondary-color)",
-        Background: "var(--background-color)",
+        background: "var(--background-color)",
         text: "var(--text-color)",
       },
     },
