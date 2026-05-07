@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
-import {Menu, ChevronLeft , ChevronRight, Search  } from "lucide-react";
+import {Menu, ChevronLeft , ChevronRight, Search, Plus, ChevronDown } from "lucide-react";
 import "../styles/Calendar.css";
+import SideBarCalendar from "../components/SideBarCalendar";
 
 interface CalendarProps {
     email: string | null;
@@ -47,14 +48,25 @@ function Calendar(calendarProps: CalendarProps) {
                 </div>
             </div>
 
+            <div className="calendar-content">
+                <div className="calendar-sidebar">
+                    <button
+                        className="calendar-create-button"
+                        onClick={() => alert("Add new event")}
+                    >
+                        <Plus className="calendar-add-icon" />
 
-            <button onClick={handleLogout}>
-                Logout
-            </button>
+                        <h1 className="calendar-create-button-title">
+                            Create
+                        </h1>
 
-            <button onClick={handleTest}>
-                test
-            </button>
+                        <ChevronDown className="calendar-dropdown-icon" />
+                    </button>
+
+                    <SideBarCalendar />
+                </div>
+                <h1 className="calendar-placeholder">Calendar content goes here...</h1>
+            </div>
         </div>
     )
 }
