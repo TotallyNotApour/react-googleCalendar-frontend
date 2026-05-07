@@ -2,11 +2,12 @@
 
 
 :root {
-	--primary-color: #E4DAC2;
-	--primary-color-hover: #D2CABE;
-	--background-color: #F4EEE1;
-	--text-color: #999999;
-	--third-color: #ebcfc4;
+	--primary-color: #c15f3c;
+	--primary-color-hover: #cd7759;
+	--background-color: #f4f3ee;
+	--text-color: #2a2a2a;
+	--subtext-color: #b1ada1;
+	--input-color: #ffffff;
 }
 
 body {

@@ -2,8 +2,11 @@ import { useState } from "react";
 import { Link, useNavigate  } from "react-router-dom";
 import "../styles/Login.css";
 
-function Login() {
-    const [email, setEmail] = useState("");
+interface LoginProps {
+    setEmail: (email:string | null) => void;
+    email: string | null;
+}
+function Login({email, setEmail}: LoginProps) {
     const [password, setPassword] = useState("");
 
     const navigate = useNavigate();
@@ -50,7 +53,7 @@ function Login() {
                         <input
                             type="email"
                             placeholder="Email"
-                            value={email}
+                            value={email??""}
                             onChange={(e) => setEmail(e.target.value)}
                         />
                         <input

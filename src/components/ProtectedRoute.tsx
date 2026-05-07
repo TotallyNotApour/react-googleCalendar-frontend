@@ -5,9 +5,9 @@ type ProtectedRouteProps = {
 }
 
 function ProtectedRoute({ children }: ProtectedRouteProps) {
-    const token = localStorage.getItem("token");
+    // const token = localStorage.getItem("token");
 
-    if (!token) {
+    if (false) { //(!token) {
         return <Navigate to="/" replace />;
     }
 

@@ -73,6 +73,7 @@
 	border-radius: 14px;
 
 	background-color: var(--primary-color);
+	color: white;
 
 	font-size: 1rem;
 	font-weight: 500;
@@ -98,4 +99,5 @@
 
 .form-link:hover {
 	text-decoration: underline;
+	color: var(--primary-color);
 }
