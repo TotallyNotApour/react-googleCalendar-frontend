@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import "../styles/Register.css";
 
 function Register() {
     const [email, setEmail] = useState("");
@@ -41,44 +42,38 @@ function Register() {
     }
 
     return (
-        <div>
-            <div>
-                <h1>Register</h1>
+        <div className="register-page">
+            <div className="register-card">
+
+                <h1 className="register-title">Create a new Account</h1>
                 
-                <form onSubmit={handleSubmit}> 
-                    <input
-                        type="email"
-                        placeholder="Email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                    />
-
-                    <br/>
-
-                    <input
-                        type="password"
-                        placeholder="Password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                    />
-                    
-                    <br />
-
-                    <input
-                        type="password"
-                        placeholder="Confirm Password"
-                        value={confirmPassword}
-                        onChange={(e) => setConfirmPassword(e.target.value)}
-                        required
-                    />
-
-                    <br />
-
-                    <button type="submit">Register</button>
-                </form>
-            </div>
-            <div>
-                <Link to="/">have an account? Register here.</Link>
+                <div className="login-content">
+                    <form onSubmit={handleSubmit} className="register-form"> 
+                        <input
+                            type="email"
+                            placeholder="Email"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                        />
+                        <input
+                            type="password"
+                            placeholder="Password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                        />
+                        <input
+                            type="password"
+                            placeholder="Confirm Password"
+                            value={confirmPassword}
+                            onChange={(e) => setConfirmPassword(e.target.value)}
+                            required
+                        />
+                        <button type="submit" className="register-button">
+                            Register
+                        </button>
+                    </form>
+                    <Link className="register-link" to="/">Have an account? Login here.</Link>
+                </div>
             </div>
         </div>
     )
