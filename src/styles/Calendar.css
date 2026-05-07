@@ -1,0 +1,26 @@
+.calendar-taskbar {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    padding: 0px 20px;
+}
+
+.calendar-menu-icon {
+    margin-right: 20px;
+    cursor: pointer;
+    width: 32px;
+    height: 32px;
+}
+
+.calendar-profile-initial {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--primary-color);
+    width: 18px;
+    height: 18px;
+    padding: 16px;
+    border-radius: 100%;
+}

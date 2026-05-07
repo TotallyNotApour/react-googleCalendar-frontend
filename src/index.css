@@ -1,9 +1,16 @@
-@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Google+Sans+Flex:opsz,wght@6..144,1..1000&display=swap');
+
 
 :root {
-  --primary-color: #c1e0ff;
-  --secondary-color: #86c3ff;
-  --background-color: #5192d3;
-  --text-color: #2d2d2d;
+	--primary-color: #c15f3c;
+	--primary-color-hover: #cd7759;
+	--background-color: #f4f3ee;
+	--text-color: #2a2a2a;
+	--subtext-color: #b1ada1;
+	--input-color: #ffffff;
 }
 
+body {
+	margin: 0;
+	font-family: 'Google Sans Flex';
+}
