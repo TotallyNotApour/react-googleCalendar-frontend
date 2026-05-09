@@ -1,8 +1,54 @@
-.sidebar-calendar {
-    width: 100%;
-    margin-top: 20px;
+.calendar-sidebar {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+
+    width: 230px;
+
+    padding: 5px;
+    overflow: visible;
+    background-color: var(--background-color);
 }
 
-.sidebar-calendar .rdp {
-    width: 100%;
+
+.calendar-create-button {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    border: none;
+    border-radius: 24px;
+    background-color: var(--primary-color);
+    color: white;
+    padding: 5px 10px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+    transition: background-color 0.2s ease;
+
 }
+
+.calendar-create-button:hover {
+    background-color: var(--primary-color-hover);
+
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.calendar-add-icon {
+    width: 32px;
+    height: 32px;
+    color: white;
+}
+
+.calendar-create-button-title {
+    font-size: 18px;
+    padding: 5px;
+    color: white;
+}
+
+.calendar-dropdown-icon {
+    color: white;
+}
+
+.calendar-content {
+    display: flex;
+    flex: 1;
+}
+
