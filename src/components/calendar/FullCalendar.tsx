@@ -1,7 +1,8 @@
 import "../../styles/FullCalendar.css";
 import type { CalendarEvent } from "../../types/CalendarEvent";
-
+import DayView from "./views/DayView";
 import MonthView from "./views/MonthView"
+import WeekView from "./views/WeekView";
 
 type CalendarView = "month" | "week" | "day";
 
@@ -22,8 +23,19 @@ function FullCalendar({ view, currentDate, events }: FullCalendarProps) {
                         events={events}
                     />
                 )}
-                {view === "week" && <h1>Week view</h1>}
-                {view === "day" && <h1>Day view</h1>}
+                {view === "week" && (
+                    <WeekView 
+                        currentDate={currentDate}
+                        events={events}
+                    />
+                )}
+                    
+                {view === "day" && (
+                    <DayView 
+                        currentDate={currentDate}
+                        events={events}
+                    />
+                )}
             </div>
         </div>
 
