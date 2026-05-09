@@ -3,6 +3,7 @@ import "../styles/Calendar.css";
 import CalendarSidebar from "../components/calendar/CalendarSidebar"
 import FullCalendar from "../components/calendar/FullCalendar"
 import Taskbar from "../components/taskbar/Taskbar"
+import type {CalendarEvent} from "../types/CalendarEvent"
 
 import { useState } from "react";
 
@@ -15,6 +16,7 @@ function Calendar(calendarProps: CalendarProps) {
     
     const [view, setView] = useState<CalendarView>("month");
     const [currentDate, setCurrentDate] = useState(new Date());
+    const [events, setEvents] = useState<CalendarEvent[]>([]);
 
     const navigate = useNavigate();
 
@@ -51,7 +53,7 @@ function Calendar(calendarProps: CalendarProps) {
             <div className="calendar-content">
                 < CalendarSidebar />
 
-                < FullCalendar view={view} currentDate={currentDate} />
+                < FullCalendar view={view} currentDate={currentDate} events={events} />
             </div>
         </div>
     )

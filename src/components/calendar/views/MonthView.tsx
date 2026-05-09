@@ -1,8 +1,8 @@
-import type { CalendarEvent } from "../../../types/CalendarEvent";
+import type { CalendarViewProps } from "../../../types/CalendarViewProps";
 
-function MonthView() {
+function MonthView({ currentDate, events }: CalendarViewProps) {
 
-    const fakeEvents: CalendarEvent[] = [
+    events.push(
         {
             user: "123",
 
@@ -10,9 +10,9 @@ function MonthView() {
 
             description: "Discuss project updates",
 
-            startDate: new Date("2024-07-01T10:00:00"),
+            startDate: new Date(currentDate),
 
-            endDate: new Date("2024-07-01T11:00:00"),
+            endDate: new Date(currentDate.getTime() + 2 * 60 * 60 * 1000),
 
             allDay: false,
 
@@ -25,12 +25,12 @@ function MonthView() {
 
                 until: new Date("2024-12-31T23:59:59"),
             },
-        },
-    ];
+        } 
+    );
 
     return (
         <div>
-            {fakeEvents[0].title}
+
         </div>
     );
 }
