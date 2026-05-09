@@ -1,14 +1,21 @@
 import { useNavigate } from "react-router-dom";
-import {Menu, ChevronLeft , ChevronRight, Search } from "lucide-react";
 import "../styles/Calendar.css";
 import CalendarSidebar from "../components/calendar/CalendarSidebar"
+import FullCalendar from "../components/calendar/FullCalendar"
+import Taskbar from "../components/taskbar/Taskbar"
 
+import { useState } from "react";
 
 interface CalendarProps {
     email: string | null;
 }
+type CalendarView = "month" | "week" | "day";
+
 function Calendar(calendarProps: CalendarProps) {
     
+    const [view, setView] = useState<CalendarView>("month");
+    const [currentDate, setCurrentDate] = useState(new Date());
+
     const navigate = useNavigate();
 
     const handleLogout = () => {
@@ -34,24 +41,17 @@ function Calendar(calendarProps: CalendarProps) {
     return (
         <div className="calendar-page">
             <div className="calendar-taskbar">
-                <Menu className="calendar-menu-icon" />
-                <h1 className="calendar-title">My Calendar</h1>
-
-                <button className="calendar-button-today" onClick={() => alert("Go to today")}>
-                    Today
-                </button>
-                <ChevronLeft className="calendar-button-prev" onClick={() => alert("Go to previous month")} />
-                <ChevronRight className="calendar-button-next" onClick={() => alert("Go to next month")} />
-                <h1 className="calendar-month-year">June 2024</h1>
-                <Search className="calendar-search-icon" onClick={() => alert("Search events")} />
-                <div className="calendar-profile-icon">
-                    <h1 className="calendar-profile-initial">{calendarProps.email?.[0].toLocaleUpperCase() || ''}</h1>
-                </div>
+                <Taskbar
+                    email={calendarProps.email}
+                    view={view}
+                    setView={setView}
+                />
             </div>
 
             <div className="calendar-content">
                 < CalendarSidebar />
-                <h1 className="calendar-placeholder">Calendar content goes here...</h1>
+
+                < FullCalendar view={view} currentDate={currentDate} />
             </div>
         </div>
     )

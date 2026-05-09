@@ -7,18 +7,15 @@ function MiniCalendar() {
     return (
         <div className="mini-calendar">
             <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DateCalendar showDaysOutsideCurrentMonth fixedWeekNumber={6}
+                <DateCalendar showDaysOutsideCurrentMonth fixedWeekNumber={6} className="mini-calendar-dateCalendar"
                     sx={{
-                        maxWidth: "95%",
+                        margin: "10px",
 
                         "& .MuiPickersCalendarHeader-root": {
                             minHeight: "32px",
                             maxHeight: "32px",
-
-                            margin: 1,
-
-                            paddingLeft: 1,
-                            paddingRight: 1,
+                            margin: 0,
+                            paddingX: " 10px",
                         },
 
                         "& .MuiPickersCalendarHeader-label": {
@@ -35,9 +32,6 @@ function MiniCalendar() {
 
                         "& .MuiDayCalendar-header": {
                             justifyContent: "space-around",
-                            margin: "2px",
-                            paddingLeft: 1,
-                            paddingRight: 1,
                         },
 
                         "& .MuiDayCalendar-weekDayLabel": {
@@ -53,6 +47,15 @@ function MiniCalendar() {
                             width: "24px !important",
                             height: "24px !important",
                             fontSize: "0.75rem",
+                        },
+
+                        "& .MuiDateCalendar-root": {
+                            width: "100%"
+                        },
+
+                        "& .MuiDayCalendar-weekContainer": {
+                            width: "100%",
+                            justifyContent: "space-around"
                         },
 
                         "& .Mui-selected": {
