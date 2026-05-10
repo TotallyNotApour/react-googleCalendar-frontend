@@ -1,0 +1,110 @@
+.month-view-card {
+    width: 100%;
+        display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.month-view-header {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+}
+
+.day-of-week {
+    text-align: center;
+    padding: 3px 0;
+}
+
+.day-of-week:not(:last-child) {
+    border-right: 1px solid #eee;
+}
+
+.month-view-grid {
+    flex: 1;
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    grid-template-rows: repeat(5, 1fr);
+    height: 100%;
+}
+
+.month-view-day {
+    border-right: 1px solid #eee;
+    border-bottom: 1px solid #eee;
+
+    padding: 8px;
+}
+
+.month-day-header{
+    display: flex;
+    justify-content: center;
+    transition: 0.15s ease;
+}
+
+.month-day-header:hover {
+    cursor: pointer;
+    background-color: gainsboro;
+    border-radius: 4px;
+}
+
+
+.date-number {
+    width: 20px;
+    height: 20px;
+
+    font-size: 12px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    line-height: 1;
+}
+
+.outside-month {
+    color: #bbb;
+}
+
+.today {
+    background-color: var(--primary-color);
+    color: white;
+    border-radius: 100%;
+}
+
+.month-day-events {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+
+    margin-top: 4px;
+}
+
+.month-day-event {
+    font-size: 12px;
+
+    padding: 2px 6px;
+
+    border-radius: 6px;
+
+    color: white;
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    transition: filter 0.15s ease;
+
+}
+
+.month-day-event:hover {
+    filter: brightness(0.9);
+}
+
+.month-day-more {
+    font-size: 12px;
+    color: gray;
+
+    padding-left: 4px;
+}
+
+.month-day-more:hover {
+    text-decoration: underline;
+    cursor: pointer;
+}

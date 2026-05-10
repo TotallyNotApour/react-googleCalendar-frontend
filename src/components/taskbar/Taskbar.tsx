@@ -65,7 +65,10 @@ function Taskbar({ email, view, currentDate, setView, setCurrentDate }: TaskbarP
             
 
             <h1 className="taskbar-month-year">
-                June 2024
+                {currentDate.toLocaleDateString("fr-CA", {
+                    month: "long",
+                    year: "numeric",
+                })}
             </h1>
 
             <div className="taskbar-right-section">

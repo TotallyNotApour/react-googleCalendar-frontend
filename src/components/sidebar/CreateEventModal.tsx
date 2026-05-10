@@ -1,7 +1,6 @@
 import Draggable from "react-draggable";
-import { useRef } from "react";
+import { useRef, useState} from "react";
 import { Clock, MapPin, AlignLeft, Palette, X } from "lucide-react";
-import { useState } from "react";
 
 import dayjs, { Dayjs } from "dayjs";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
@@ -11,7 +10,9 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import Checkbox from "@mui/material/Checkbox";
 import FormControlLabel from "@mui/material/FormControlLabel";
 
+import type { CalendarEvent }  from "../../types/CalendarEvent";
 import "../../styles/CreateEventModal.css"
+import RecurrenceDropdown from "./RecurrenceDropdown";
 
 
 
@@ -19,6 +20,14 @@ interface CreateEventModalProps {
     currentDate: Date;
     onClose: () => void;
 }
+
+interface RecurrenceOptions {
+    frequency: "none" | "daily" | "weekly" | "monthly" | "yearly";
+    interval: number;
+    firstOccurence?: Date;
+    until?: Date;
+}
+
 const colors = [
         "#c15f3c",
         "#d16ba5",
@@ -27,15 +36,13 @@ const colors = [
         "#00c9a7",
         "#6bcB77",
         "#f9c74f",
-
-        "#f94144",
-        "#f3722c",
         "#f8961e",
+        "#f3722c",
+        "#f94144",
     ];
 
 function CreateEventModal({ currentDate, onClose }: CreateEventModalProps) {
     const nodeRef = useRef<HTMLDivElement>(null);
-
 
     const [selectedColor, setSelectedColor] = useState(colors[0]);
 
@@ -43,14 +50,13 @@ function CreateEventModal({ currentDate, onClose }: CreateEventModalProps) {
     const [isAllDay, setIsAllDay] = useState(false);
     const [allDayStartDate, setAllDayStartDate] = useState<Dayjs | null>(dayjs(currentDate));
     const [allDayEndDate, setAllDayEndDate] = useState<Dayjs | null>(dayjs(currentDate));
-    const [startTime, setStartTime] = useState<Dayjs | null>(
-        dayjs(currentDate)
-    );
-    const [endTime, setEndTime] = useState<Dayjs | null>(
-        dayjs(currentDate).add(2, "hour")
-    );
+    const [startTime, setStartTime] = useState<Dayjs | null>(dayjs(currentDate));
+    const [endTime, setEndTime] = useState<Dayjs | null>(dayjs(currentDate).add(2, "hour"));
     const [isSaving, setIsSaving] = useState(false);
-
+    const [recurrenceOptions, setRecurrenceOptions] = useState<RecurrenceOptions>({
+        frequency: "none",
+        interval: 1,
+    });
 
     const handleSave = async () => {
         if (isSaving) {
@@ -59,15 +65,29 @@ function CreateEventModal({ currentDate, onClose }: CreateEventModalProps) {
 
         setIsSaving(true);
 
-        const newEvent = {
-            title: "New Event",
+        const newEvent: CalendarEvent = {
+            user: "user-id-placeholder",
+            title: "Event title placeholder",
+            description: "Event description placeholder",
+            startDate: isAllDay && allDayStartDate
+                ? allDayStartDate.startOf("day").toDate()
+                : eventDate && startTime
+                    ? eventDate.hour(startTime.hour()).minute(startTime.minute()).toDate()
+                    : new Date(),
+            endDate: isAllDay && allDayEndDate
+                ? allDayEndDate.endOf("day").toDate()
+                : eventDate && endTime
+                    ? eventDate.hour(endTime.hour()).minute(endTime.minute()).toDate()
+                    : new Date(),
             allDay: isAllDay,
-            date: isAllDay ? allDayStartDate : eventDate,
-            startDate: isAllDay ? allDayStartDate : eventDate,
-            endDate: isAllDay ? allDayEndDate : eventDate,
-            startTime: isAllDay ? null : startTime,
-            endTime: isAllDay ? null : endTime,
             color: selectedColor,
+            recurrence: {
+                frequency: recurrenceOptions.frequency ,
+                interval: recurrenceOptions.interval,
+                firstOccurence: recurrenceOptions.firstOccurence,
+                until: recurrenceOptions.until,
+            },
+
         };
 
         await new Promise((resolve) => setTimeout(resolve, 500));
@@ -105,7 +125,6 @@ function CreateEventModal({ currentDate, onClose }: CreateEventModalProps) {
                                             slotProps={{
                                                 textField: {
                                                     size: "small",
-
                                                     sx: {
                                                         width: 150,
                                                     },
@@ -117,9 +136,7 @@ function CreateEventModal({ currentDate, onClose }: CreateEventModalProps) {
                                                 },
                                             }}
                                         />
-
                                         <span>to</span>
-
                                         <DatePicker
                                             label="End date"
                                             value={allDayEndDate}
@@ -127,7 +144,6 @@ function CreateEventModal({ currentDate, onClose }: CreateEventModalProps) {
                                             slotProps={{
                                                 textField: {
                                                     size: "small",
-
                                                     sx: {
                                                         width: 150,
                                                     },
@@ -149,7 +165,6 @@ function CreateEventModal({ currentDate, onClose }: CreateEventModalProps) {
                                             slotProps={{
                                                 textField: {
                                                     size: "small",
-
                                                     sx: {
                                                         width: 150,
                                                     },
@@ -227,6 +242,11 @@ function CreateEventModal({ currentDate, onClose }: CreateEventModalProps) {
                                 checked={isAllDay}
                                 onChange={(_, checked) => setIsAllDay(checked)}
                             />
+                        </div>
+
+                        <div className="event-row">
+                            <div />
+                            <RecurrenceDropdown startTime={startTime} recurrenceOptions={recurrenceOptions} setRecurrenceOptions={setRecurrenceOptions} />
                         </div>
 
                         <div className="event-row">

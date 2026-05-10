@@ -1,3 +1,9 @@
 .dropdown-card {
     padding: 0 2rem;
 }
+
+.recurrence-dropdown-card {
+    width: fit-content;
+    max-width: 100%;
+    padding: 0;
+}

@@ -7,7 +7,7 @@ import ListItemText from '@mui/material/ListItemText';
 import Typography from '@mui/material/Typography';
 
 import { ChevronDown } from "lucide-react";
-
+    
 import "../../styles/ViewDropdown.css";
 
 type CalendarView = "month" | "week" | "day";
