@@ -20,21 +20,35 @@ function MonthView({ currentDate, events }: CalendarViewProps) {
 
 
     const days: CalendarDay[] = Array.from(
-        { length: 35 },
+        { length: 42 },
         (_, index) => {
 
             const date = new Date(calendarStartDate);
 
             date.setDate(calendarStartDate.getDate() + index);
 
-            const dayEvents = events.filter((event) => {
+            const dayEvents = events
+                .filter((event) => {
 
-                return (
-                    event.startDate.getDate() === date.getDate() &&
-                    event.startDate.getMonth() === date.getMonth() &&
-                    event.startDate.getFullYear() === date.getFullYear()
-                );
-            });
+                    return (
+                        event.startDate.getDate() === date.getDate() &&
+                        event.startDate.getMonth() === date.getMonth() &&
+                        event.startDate.getFullYear() === date.getFullYear()
+                    );
+                })
+
+                .sort((a, b) => {
+
+                    // all-day events first
+                    if (a.allDay && !b.allDay) return -1;
+                    if (!a.allDay && b.allDay) return 1;
+
+                    // then sort by start time
+                    return (
+                        new Date(a.startDate).getTime() -
+                        new Date(b.startDate).getTime()
+                    );
+                });
 
             return {
                 date,
@@ -56,9 +70,9 @@ function MonthView({ currentDate, events }: CalendarViewProps) {
             user: "123",
             title: "Team Meeting",
             description: "Discuss project updates",
-            startDate: new Date(currentDate),
+            startDate: new Date(currentDate.getTime() + 2 * 60 * 1000),
             endDate: new Date(currentDate.getTime() + 2 * 60 * 60 * 1000),
-            allDay: false,
+            allDay: true,
             color: "#4b8bbe",
             recurrence: {
                 frequency: "weekly",
@@ -98,19 +112,56 @@ function MonthView({ currentDate, events }: CalendarViewProps) {
                                 </div>
                             </div>
                             <div className="month-day-events">
-                                {day.events.slice(0, 4).map((event, index) => (
-                                    <div
-                                        key={index}
-                                        className="month-day-event"
-                                        style={{ backgroundColor: event.color }}
-                                    >
-                                        {event.title}
-                                    </div>
-                                ))}
+                                {day.events.slice(0, 3).map((event, index) => {
+                                    const isPastEvent = event.endDate < new Date();
+                                    const isAllDay = event.allDay;
+                                    const eventClass = `month-day-event 
+                                        ${isPastEvent ? "past-event" : ""} 
+                                        ${isAllDay ? "all-day-event" : ""}
+                                    `;
 
-                                {day.events.length > 4 && (
+                                    return (
+                                        <div
+                                            key={index}
+                                            className={eventClass}
+
+                                            style={
+                                                isAllDay
+                                                    ? { backgroundColor: event.color }
+                                                    : {}
+                                            }
+                                        >
+
+                                            {!isAllDay && (
+                                                <div
+                                                    className="month-day-event-dot"
+
+                                                    style={{
+                                                        backgroundColor: event.color
+                                                    }}
+                                                />
+                                            )}
+
+                                            {!isAllDay && (
+                                                <div className="month-day-event-time">
+                                                    {event.startDate.toLocaleTimeString([], {
+                                                        hour: "2-digit",
+                                                        minute: "2-digit",
+                                                    })}
+                                                </div>
+                                            )}
+
+                                            <div className="month-day-event-title">
+                                                {event.title}
+                                            </div>
+
+                                        </div>
+                                    );
+                                })}
+
+                                {day.events.length > 3 && (
                                     <div className="month-day-more" onClick={handleMoreClick}>
-                                        +{day.events.length - 4} more
+                                        +{day.events.length - 3} more
                                     </div>
                                 )}
 

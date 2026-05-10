@@ -7,7 +7,7 @@
 
 .month-view-header {
     display: grid;
-    grid-template-columns: repeat(7, 1fr);
+    grid-template-columns: repeat(7, minmax(0, 1fr));
 }
 
 .day-of-week {
@@ -16,22 +16,23 @@
 }
 
 .day-of-week:not(:last-child) {
-    border-right: 1px solid #eee;
+    border-right: 1px solid #d7d7d7;
 }
 
 .month-view-grid {
     flex: 1;
     display: grid;
     grid-template-columns: repeat(7, 1fr);
-    grid-template-rows: repeat(5, 1fr);
-    height: 100%;
+    grid-template-rows: repeat(6, 1fr);
 }
 
 .month-view-day {
-    border-right: 1px solid #eee;
-    border-bottom: 1px solid #eee;
+    border-right: 1px solid #d7d7d7;
+    border-bottom: 1px solid #d7d7d7;
 
     padding: 8px;
+    min-width: 70px;
+    overflow: hidden;
 }
 
 .month-day-header{
@@ -43,7 +44,7 @@
 .month-day-header:hover {
     cursor: pointer;
     background-color: gainsboro;
-    border-radius: 4px;
+    border-radius: 6px;
 }
 
 
@@ -78,23 +79,55 @@
 }
 
 .month-day-event {
+    display: flex;
+    align-items: center;
     font-size: 12px;
+    gap: 6px;
 
     padding: 2px 6px;
 
     border-radius: 6px;
 
-    color: white;
-
     overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    transition: filter 0.15s ease;
+    min-width: 0;
 
 }
 
+.month-day-event-title{
+    min-width: 0;
+    flex: 1;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.month-day-event-time {
+    flex-shrink: 0;
+    white-space: nowrap;
+    font-weight: 300;
+}
+
+
+.month-day-event-dot {
+    width: 8px;
+    height: 8px;
+
+    border-radius: 50%;
+
+    flex-shrink: 0;
+}
+
 .month-day-event:hover {
-    filter: brightness(0.9);
+    background-color: gainsboro;
+}
+
+.month-day-event.all-day-event:hover {
+    filter: opacity(0.8);
+}
+
+.month-day-event.past-event {
+    opacity: 0.5;
 }
 
 .month-day-more {
