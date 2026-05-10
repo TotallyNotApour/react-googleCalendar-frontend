@@ -19,6 +19,7 @@ import RecurrenceDropdown from "./RecurrenceDropdown";
 interface CreateEventModalProps {
     currentDate: Date;
     onClose: () => void;
+    onCreateEvent: (event: CalendarEvent) => Promise<void>;
 }
 
 interface RecurrenceOptions {
@@ -41,7 +42,7 @@ const colors = [
         "#f94144",
     ];
 
-function CreateEventModal({ currentDate, onClose }: CreateEventModalProps) {
+function CreateEventModal({ currentDate, onClose, onCreateEvent}: CreateEventModalProps) {
     const nodeRef = useRef<HTMLDivElement>(null);
 
     const [selectedColor, setSelectedColor] = useState(colors[0]);
@@ -59,9 +60,7 @@ function CreateEventModal({ currentDate, onClose }: CreateEventModalProps) {
     });
 
     const handleSave = async () => {
-        if (isSaving) {
-            return;
-        }
+        if (isSaving) return;
 
         setIsSaving(true);
 
@@ -81,21 +80,17 @@ function CreateEventModal({ currentDate, onClose }: CreateEventModalProps) {
                     : new Date(),
             allDay: isAllDay,
             color: selectedColor,
-            recurrence: {
-                frequency: recurrenceOptions.frequency ,
-                interval: recurrenceOptions.interval,
-                firstOccurence: recurrenceOptions.firstOccurence,
-                until: recurrenceOptions.until,
-            },
-
+            recurrence: recurrenceOptions,
         };
 
-        await new Promise((resolve) => setTimeout(resolve, 500));
-
-        console.log(newEvent);
-
-        setIsSaving(false);
-        onClose();
+        try {
+            await onCreateEvent(newEvent);
+            onClose();
+        } catch (error) {
+            console.error("Failed to create event:", error);
+        } finally {
+            setIsSaving(false);
+        }
     };
 
     return (

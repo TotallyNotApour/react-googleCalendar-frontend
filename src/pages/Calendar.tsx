@@ -7,6 +7,7 @@ import type {CalendarEvent} from "../types/CalendarEvent"
 import { getDateRange } from "../Utils/GetRangeDate"
 
 import { useEffect, useState } from "react";
+import { createEvent, getEventsByDateRange } from "../services/eventService";
 
 interface CalendarProps {
     email: string | null;
@@ -25,46 +26,34 @@ function Calendar(calendarProps: CalendarProps) {
         navigate("/");
     }
 
-    const handleTest = async () => {
-        const token = localStorage.getItem("token");
+
+    const refreshEvents = async () => {
         try {
-            const response = await fetch("http://localhost:5000/api/auth/me", {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            });
-            const data = await response.json();
-            console.log(data);
+            const { start, end } = getDateRange(currentDate, view);
+            const data = await getEventsByDateRange(start, end);
+
+            const eventsData: CalendarEvent[] = data.events || [];
+            console.log("Fetched events:", eventsData);
+            setEvents(eventsData);
         } catch (error) {
-            console.error("Error fetching user data:", error);
+            console.error("Failed to refresh events:", error);
         }
     };
 
-    useEffect( () => {
-        const fetchEvents = async () => {
-            try {
-                const { start, end } = getDateRange(currentDate, view);
-                const token = localStorage.getItem("token");
-                const response = await fetch(
-                    `http://localhost:5000/api/events/getByDateRange?start=${start.toISOString()}&end=${end.toISOString()}`,
-                    {
-                        headers: {
-                            Authorization: `Bearer ${token}`,
-                        },
-                    }
-                );
-                if (!response.ok) {
-                    throw new Error("Failed to fetch events");
-                }
-
-                const data = await response.json();
-                setEvents(data.events);
-            } catch (error) {
-                console.error("Failed to fetch events:", error);
-            }   
-        }
-        fetchEvents();
+    useEffect(() => {
+        refreshEvents();
     }, [currentDate, view]);
+
+    const handleCreateEvent = async (newEvent: CalendarEvent) => {
+        try {
+            await createEvent(newEvent);
+            await refreshEvents();
+        } catch (error) {
+            console.error("Failed to create event:", error);
+        }
+    };
+
+
     
     return (
         <div className="calendar-page">
@@ -83,6 +72,7 @@ function Calendar(calendarProps: CalendarProps) {
                     view={view} 
                     currentDate={currentDate}
                     setCurrentDate={setCurrentDate}
+                    onCreateEvent={handleCreateEvent}
                 />
 
                 < FullCalendar view={view} currentDate={currentDate} events={events} />

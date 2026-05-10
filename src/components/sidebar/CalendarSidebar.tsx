@@ -4,6 +4,7 @@ import "../../styles/SideBarCalendar.css";
 import Tooltip from "@mui/material/Tooltip";
 import CreateEventModal from "./CreateEventModal"
 import { useState } from "react";
+import type { CalendarEvent } from "../../types/CalendarEvent";
 
 
 type CalendarView = "month" | "week" | "day";
@@ -12,10 +13,10 @@ interface SidebarProps {
     view: CalendarView;
     currentDate: Date;
     setCurrentDate: React.Dispatch<React.SetStateAction<Date>>;
-
+    onCreateEvent: (newEvent: CalendarEvent) => Promise<void>;
 }
 
-function CalendarSidebar({view, currentDate, setCurrentDate}: SidebarProps) {
+function CalendarSidebar({view, currentDate, setCurrentDate, onCreateEvent}: SidebarProps) {
 
     const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
 
@@ -46,6 +47,7 @@ function CalendarSidebar({view, currentDate, setCurrentDate}: SidebarProps) {
                 <CreateEventModal 
                     currentDate={currentDate}
                     onClose={() => setIsCreateModalOpen(false)}
+                    onCreateEvent={onCreateEvent}
                 />
             )}
         </div>

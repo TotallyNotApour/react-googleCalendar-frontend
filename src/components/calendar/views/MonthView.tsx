@@ -61,26 +61,13 @@ function MonthView({ currentDate, events }: CalendarViewProps) {
         alert("Show more events for this day");
     }
 
+    const handleEventClick = (event: CalendarEvent) => {
+        alert(`Event: ${event.title}\nDescription: ${event.description}`);
+    }
+
     const handleDayClick = () => {
         alert("Day clicked");
     }
-
-    events.push(
-        {
-            user: "123",
-            title: "Team Meeting",
-            description: "Discuss project updates",
-            startDate: new Date(currentDate.getTime() + 2 * 60 * 1000),
-            endDate: new Date(currentDate.getTime() + 2 * 60 * 60 * 1000),
-            allDay: true,
-            color: "#4b8bbe",
-            recurrence: {
-                frequency: "weekly",
-                interval: 1,
-                until: new Date("2024-12-31T23:59:59"),
-            },
-        } 
-    );
 
     return (
         <div className="month-view-card">
@@ -124,7 +111,7 @@ function MonthView({ currentDate, events }: CalendarViewProps) {
                                         <div
                                             key={index}
                                             className={eventClass}
-
+                                            onClick={() => handleEventClick(event)}
                                             style={
                                                 isAllDay
                                                     ? { backgroundColor: event.color }
