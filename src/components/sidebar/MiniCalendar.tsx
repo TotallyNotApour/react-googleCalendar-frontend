@@ -3,11 +3,27 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import "../../styles/MiniCalendar.css";
 
-function MiniCalendar() {
+type CalendarView = "month" | "week" | "day";
+
+interface SidebarProps {
+    view: CalendarView;
+    currentDate: Date;
+    setCurrentDate: React.Dispatch<React.SetStateAction<Date>>;
+}
+
+function MiniCalendar({view, currentDate, setCurrentDate}: SidebarProps) {
+
     return (
         <div className="mini-calendar">
             <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DateCalendar showDaysOutsideCurrentMonth fixedWeekNumber={6} className="mini-calendar-dateCalendar"
+                <DateCalendar className="mini-calendar-dateCalendar"
+                    showDaysOutsideCurrentMonth 
+                    fixedWeekNumber={6} 
+                    onChange={(newValue) => {
+                        if (newValue) {
+                            setCurrentDate(newValue.toDate());
+                        }
+                    }}
                     sx={{
                         margin: "10px",
 
@@ -58,17 +74,31 @@ function MiniCalendar() {
                             justifyContent: "space-around"
                         },
 
-                        "& .Mui-selected": {
+                        "& .MuiPickerDay-today": {
                             backgroundColor: "var(--primary-color) !important",
                             color: "white",
+                            outline: 0,
                         },
 
-                        "& .Mui-selected:hover": {
+                        "& .MuiPickerDay-today:hover": {
                             backgroundColor: "var(--primary-color-hover) !important",
                         },
 
-                        "& .MuiPickersDay-root:hover": {
-                            backgroundColor: "var(--primary-color-hover)",
+                        "& .Mui-selected.Mui-focusVisible": {
+                            backgroundColor: "#d5d5d5 !important",
+                        },
+
+                        "& .MuiPickersDay-root:focus": {
+                            backgroundColor: "#d5d5d5 !important",
+                        },
+
+                        "& .Mui-selected": {
+                            backgroundColor: "#d5d5d5",
+                            color: "black"
+                        },
+
+                        "& .Mui-selected:hover": {
+                            backgroundColor: "#b5b5b5",
                         },
                     }}
                 />

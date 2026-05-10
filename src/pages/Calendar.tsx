@@ -1,9 +1,10 @@
 import { useNavigate } from "react-router-dom";
 import "../styles/Calendar.css";
-import CalendarSidebar from "../components/calendar/CalendarSidebar"
+import CalendarSidebar from "../components/sidebar/CalendarSidebar"
 import FullCalendar from "../components/calendar/FullCalendar"
 import Taskbar from "../components/taskbar/Taskbar"
 import type {CalendarEvent} from "../types/CalendarEvent"
+import { getDateRange } from "../Utils/GetRangeDate"
 
 import { useEffect, useState } from "react";
 
@@ -16,7 +17,7 @@ function Calendar(calendarProps: CalendarProps) {
     const navigate = useNavigate();
 
     const [view, setView] = useState<CalendarView>("month");
-    const [currentDate, setCurrentDate] = useState(new Date());
+    const [currentDate, setCurrentDate] = useState(new Date())
     const [events, setEvents] = useState<CalendarEvent[]>([]);
 
     const handleLogout = () => {
@@ -78,7 +79,11 @@ function Calendar(calendarProps: CalendarProps) {
             </div>
 
             <div className="calendar-content">
-                < CalendarSidebar />
+                < CalendarSidebar 
+                    view={view} 
+                    currentDate={currentDate}
+                    setCurrentDate={setCurrentDate}
+                />
 
                 < FullCalendar view={view} currentDate={currentDate} events={events} />
             </div>
@@ -86,38 +91,5 @@ function Calendar(calendarProps: CalendarProps) {
     )
 }
 
-
-function getDateRange(currentDate: Date, view: CalendarView) {
-    const start = new Date(currentDate);
-    const end = new Date(currentDate);
-
-    if (view === "month") {
-        start.setDate(1);
-        start.setHours(0, 0, 0, 0);
-
-        end.setDate(1);
-        end.setMonth(end.getMonth() + 1);
-        end.setHours(0, 0, 0, 0);
-    }
-
-    if (view === "week") {
-        const day = start.getDay();
-
-        start.setDate(start.getDate() - day);
-        start.setHours(0, 0, 0, 0);
-
-        end.setTime(start.getTime());
-        end.setDate(end.getDate() + 7);
-    }
-
-    if (view === "day") {
-        start.setHours(0, 0, 0, 0);
-
-        end.setTime(start.getTime());
-        end.setDate(end.getDate() + 1);
-    }
-
-    return { start, end };
-}
 
 export default Calendar
