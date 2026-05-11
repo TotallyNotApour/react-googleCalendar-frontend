@@ -32,7 +32,21 @@ function Calendar(calendarProps: CalendarProps) {
             const { start, end } = getDateRange(currentDate, view);
             const data = await getEventsByDateRange(start, end);
 
-            const eventsData: CalendarEvent[] = data.events || [];
+            const eventsData: CalendarEvent[] = data.fullEvents.map((event: CalendarEvent) => ({
+                ...event,
+                startDate: new Date(event.startDate),
+                endDate: new Date(event.endDate),
+                recurrence: {
+                    ...event.recurrence,
+                    firstOccurence: event.recurrence.firstOccurence
+                        ? new Date(event.recurrence.firstOccurence)
+                        : undefined,
+                    until: event.recurrence.until
+                        ? new Date(event.recurrence.until)
+                        : undefined,
+                },
+            }));
+
             console.log("Fetched events:", eventsData);
             setEvents(eventsData);
         } catch (error) {

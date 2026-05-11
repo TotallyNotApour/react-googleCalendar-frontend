@@ -5,11 +5,17 @@ export function getDateRange(currentDate: Date, view: CalendarView) {
     const end = new Date(currentDate);
 
     if (view === "month") {
-        start.setDate(1);
+        const year = currentDate.getFullYear();
+        const month = currentDate.getMonth();
+
+        const firstDayOfMonth = new Date(year, month, 1);
+        const startDay = firstDayOfMonth.getDay();
+
+        start.setFullYear(year, month, 1 - startDay);
         start.setHours(0, 0, 0, 0);
 
-        end.setDate(1);
-        end.setMonth(end.getMonth() + 1);
+        end.setTime(start.getTime());
+        end.setDate(end.getDate() + 42);
         end.setHours(0, 0, 0, 0);
     }
 

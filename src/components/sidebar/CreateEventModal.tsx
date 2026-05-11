@@ -42,11 +42,20 @@ const colors = [
         "#f94144",
     ];
 
+type EventFormErrors = {
+    eventDate?: boolean;
+    allDayStartDate?: boolean;
+    allDayEndDate?: boolean;
+    startTime?: boolean;
+    endTime?: boolean;
+}
+
 function CreateEventModal({ currentDate, onClose, onCreateEvent}: CreateEventModalProps) {
     const nodeRef = useRef<HTMLDivElement>(null);
 
     const [selectedColor, setSelectedColor] = useState(colors[0]);
-
+    const [title, setTitle] = useState("");
+    const [description, setDescription] = useState("");
     const [eventDate, setEventDate] = useState<Dayjs | null>(dayjs(currentDate));
     const [isAllDay, setIsAllDay] = useState(false);
     const [allDayStartDate, setAllDayStartDate] = useState<Dayjs | null>(dayjs(currentDate));
@@ -59,25 +68,76 @@ function CreateEventModal({ currentDate, onClose, onCreateEvent}: CreateEventMod
         interval: 1,
     });
 
+
+    const [formErrors, setFormErrors] = useState<EventFormErrors>({});
+
     const handleSave = async () => {
         if (isSaving) return;
+        setFormErrors({});
+
+        let startDate: Date;
+        let endDate: Date;
+
+        if (isAllDay) {
+            if (!allDayStartDate || !allDayEndDate) {
+                setFormErrors({
+                    allDayStartDate: !allDayStartDate,
+                    allDayEndDate: !allDayEndDate
+                });
+                return;
+            }
+
+            startDate = allDayStartDate.startOf("day").toDate();
+            endDate = allDayEndDate.endOf("day").toDate();
+
+            if (endDate <= startDate) {
+                setFormErrors({
+                    allDayStartDate: true,
+                    allDayEndDate: true
+                });
+                return;
+            }
+
+        } else {
+            if (!eventDate || !startTime || !endTime) {
+                setFormErrors({
+                    eventDate: !eventDate,
+                    startTime: !startTime,
+                    endTime: !endTime
+                });
+                return;
+            }
+
+            startDate = eventDate
+                .hour(startTime.hour())
+                .minute(startTime.minute())
+                .second(0)
+                .millisecond(0)
+                .toDate();
+
+            endDate = eventDate
+                .hour(endTime.hour())
+                .minute(endTime.minute())
+                .second(0)
+                .millisecond(0)
+                .toDate();
+
+            if (endDate <= startDate) {
+                setFormErrors({
+                    startTime: true,
+                    endTime: true
+                });
+                return;
+            }
+        }
 
         setIsSaving(true);
 
         const newEvent: CalendarEvent = {
-            user: "user-id-placeholder",
-            title: "Event title placeholder",
-            description: "Event description placeholder",
-            startDate: isAllDay && allDayStartDate
-                ? allDayStartDate.startOf("day").toDate()
-                : eventDate && startTime
-                    ? eventDate.hour(startTime.hour()).minute(startTime.minute()).toDate()
-                    : new Date(),
-            endDate: isAllDay && allDayEndDate
-                ? allDayEndDate.endOf("day").toDate()
-                : eventDate && endTime
-                    ? eventDate.hour(endTime.hour()).minute(endTime.minute()).toDate()
-                    : new Date(),
+            title,
+            description,
+            startDate,
+            endDate,
             allDay: isAllDay,
             color: selectedColor,
             recurrence: recurrenceOptions,
@@ -105,6 +165,8 @@ function CreateEventModal({ currentDate, onClose, onCreateEvent}: CreateEventMod
                         <input
                             className="event-title-input"
                             placeholder="Add title"
+                            value={title}
+                            onChange={(e) => setTitle(e.target.value)}
                         />
 
                     <div className="event-row">
@@ -120,6 +182,7 @@ function CreateEventModal({ currentDate, onClose, onCreateEvent}: CreateEventMod
                                             slotProps={{
                                                 textField: {
                                                     size: "small",
+                                                    error: Boolean(formErrors.allDayStartDate),
                                                     sx: {
                                                         width: 150,
                                                     },
@@ -139,6 +202,7 @@ function CreateEventModal({ currentDate, onClose, onCreateEvent}: CreateEventMod
                                             slotProps={{
                                                 textField: {
                                                     size: "small",
+                                                    error: Boolean(formErrors.allDayEndDate),
                                                     sx: {
                                                         width: 150,
                                                     },
@@ -159,6 +223,7 @@ function CreateEventModal({ currentDate, onClose, onCreateEvent}: CreateEventMod
                                             onChange={(newValue) => setEventDate(newValue)}
                                             slotProps={{
                                                 textField: {
+                                                    error: Boolean(formErrors.eventDate),
                                                     size: "small",
                                                     sx: {
                                                         width: 150,
@@ -178,6 +243,7 @@ function CreateEventModal({ currentDate, onClose, onCreateEvent}: CreateEventMod
                                             onChange={(newValue) => setStartTime(newValue)}
                                             slotProps={{
                                                 textField: {
+                                                    error: Boolean(formErrors.startTime),
                                                     size: "small",
 
                                                     sx: {
@@ -200,6 +266,7 @@ function CreateEventModal({ currentDate, onClose, onCreateEvent}: CreateEventMod
                                             onChange={(newValue) => setEndTime(newValue)}
                                             slotProps={{
                                                 textField: {
+                                                    error: Boolean(formErrors.endTime),
                                                     size: "small",
 
                                                     sx: {
@@ -257,6 +324,8 @@ function CreateEventModal({ currentDate, onClose, onCreateEvent}: CreateEventMod
                             <textarea
                                 className="event-description-input"
                                 placeholder="Add description"
+                                value={description}
+                                onChange={(e) => setDescription(e.target.value)}
                             />
                         </div>
 

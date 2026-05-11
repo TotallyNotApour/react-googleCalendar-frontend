@@ -1,6 +1,5 @@
 export interface CalendarEvent {
     _id?: string;
-    user: string;
     title: string;
     description: string;
     startDate: Date;
