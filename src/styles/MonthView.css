@@ -1,6 +1,6 @@
 .month-view-card {
     width: 100%;
-        display: flex;
+    display: flex;
     flex-direction: column;
     height: 100%;
 }
@@ -13,6 +13,7 @@
 .day-of-week {
     text-align: center;
     padding: 3px 0;
+    color: "var(--text-color)";
 }
 
 .day-of-week:not(:last-child) {
@@ -35,6 +36,12 @@
     overflow: hidden;
 }
 
+.month-view-day:nth-last-child(-n + 7) {
+    border-bottom: none;
+}
+.month-view-day:nth-child(7n) {
+    border-right: none;
+}
 .month-day-header{
     display: flex;
     justify-content: center;

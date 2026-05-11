@@ -67,7 +67,7 @@
     padding: 6px;
 
     border-radius: 50%;
-
+    user-select: none;
     transition: background-color 0.2s ease;
 }
 

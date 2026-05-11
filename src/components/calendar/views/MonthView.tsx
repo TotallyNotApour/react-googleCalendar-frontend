@@ -2,14 +2,14 @@ import type { CalendarViewProps } from "../../../types/CalendarViewProps";
 import "../../../styles/MonthView.css";
 import type { CalendarEvent } from "../../../types/CalendarEvent";
 
-const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+const daysOfWeek = ["Sun.", "Mon.", "Tue.", "Wed.", "Thu.", "Fri.", "Sat."];
 
 interface CalendarDay {
     date: Date;
     events: CalendarEvent[];
 }
 
-function MonthView({ currentDate, events }: CalendarViewProps) {
+function MonthView({ currentDate, events, onOpenCreateModal }: CalendarViewProps) {
     const year = currentDate.getFullYear();
     const month = currentDate.getMonth();
 
@@ -65,9 +65,9 @@ function MonthView({ currentDate, events }: CalendarViewProps) {
         alert(`Event: ${event.title}\nDescription: ${event.description}`);
     }
 
-    const handleDayClick = () => {
-        alert("Day clicked");
-    }
+    const handleDayClick = (date: Date) => {
+        onOpenCreateModal?.(date);
+    };
 
     return (
         <div className="month-view-card">
@@ -88,7 +88,7 @@ function MonthView({ currentDate, events }: CalendarViewProps) {
                         day.date.getFullYear() === today.getFullYear();
                     return (
                         <div key={day.date.toISOString()} className="month-view-day" > 
-                            <div className="month-day-header" onClick={handleDayClick}>  
+                            <div className="month-day-header" onClick={() => handleDayClick(day.date)}>  
                                 <div
                                     className={`
                                         ${isCurrentMonth ? "date-number" : "date-number outside-month"}
@@ -165,13 +165,3 @@ function MonthView({ currentDate, events }: CalendarViewProps) {
 }
 
 export default MonthView;
-
-/*
-            <h1>
-                {currentDate.toLocaleDateString("fr-CA", {
-                    day: "numeric",
-                    month: "long",
-                    year: "numeric",
-                })}
-            </h1>
-            */

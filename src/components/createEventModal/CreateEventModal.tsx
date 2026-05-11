@@ -134,7 +134,7 @@ function CreateEventModal({ currentDate, onClose, onCreateEvent}: CreateEventMod
         setIsSaving(true);
 
         const newEvent: CalendarEvent = {
-            title,
+            title : title || "Untitled Event",
             description,
             startDate,
             endDate,

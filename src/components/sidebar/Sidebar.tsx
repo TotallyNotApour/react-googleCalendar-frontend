@@ -1,10 +1,7 @@
 import { Plus, ChevronDown } from "lucide-react";
 import MiniCalendar from "./MiniCalendar"
-import "../../styles/SideBarCalendar.css";
+import "../../styles/SideBar.css";
 import Tooltip from "@mui/material/Tooltip";
-import CreateEventModal from "./CreateEventModal"
-import { useState } from "react";
-import type { CalendarEvent } from "../../types/CalendarEvent";
 
 
 type CalendarView = "month" | "week" | "day";
@@ -13,19 +10,18 @@ interface SidebarProps {
     view: CalendarView;
     currentDate: Date;
     setCurrentDate: React.Dispatch<React.SetStateAction<Date>>;
-    onCreateEvent: (newEvent: CalendarEvent) => Promise<void>;
+    onOpenCreateModal: () => void;
 }
 
-function CalendarSidebar({view, currentDate, setCurrentDate, onCreateEvent}: SidebarProps) {
+function Sidebar({view, currentDate, setCurrentDate, onOpenCreateModal}: SidebarProps) {
 
-    const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
 
     return (
         <div className="calendar-sidebar">
             <Tooltip title="Create">
                 <button
                     className="calendar-create-button"
-                    onClick={() => setIsCreateModalOpen(true)}
+                    onClick={onOpenCreateModal}
                 >
                     <Plus className="calendar-add-icon" />
 
@@ -41,19 +37,8 @@ function CalendarSidebar({view, currentDate, setCurrentDate, onCreateEvent}: Sid
                 currentDate={currentDate}
                 setCurrentDate={setCurrentDate}
               />
-
-
-              {isCreateModalOpen && (
-                <CreateEventModal 
-                    currentDate={currentDate}
-                    onClose={() => setIsCreateModalOpen(false)}
-                    onCreateEvent={onCreateEvent}
-                />
-            )}
         </div>
-
-        
     );
 }
 
-export default CalendarSidebar
+export default Sidebar

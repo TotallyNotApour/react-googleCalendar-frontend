@@ -1,12 +1,13 @@
-import { useNavigate } from "react-router-dom";
 import "../styles/Calendar.css";
-import CalendarSidebar from "../components/sidebar/CalendarSidebar"
+import Sidebar from "../components/sidebar/Sidebar"
 import FullCalendar from "../components/calendar/FullCalendar"
 import Taskbar from "../components/taskbar/Taskbar"
 import type {CalendarEvent} from "../types/CalendarEvent"
-import { getDateRange } from "../Utils/GetRangeDate"
+import { getDateRange } from "../utils/GetRangeDate"
+import CreateEventModal from "../components/createEventModal/CreateEventModal";
 
-import { useEffect, useState } from "react";
+
+import { useEffect, useState  } from "react";
 import { createEvent, getEventsByDateRange } from "../services/eventService";
 
 interface CalendarProps {
@@ -15,17 +16,43 @@ interface CalendarProps {
 type CalendarView = "month" | "week" | "day";
 
 function Calendar(calendarProps: CalendarProps) {
-    const navigate = useNavigate();
-
     const [view, setView] = useState<CalendarView>("month");
     const [currentDate, setCurrentDate] = useState(new Date())
     const [events, setEvents] = useState<CalendarEvent[]>([]);
 
-    const handleLogout = () => {
-        localStorage.removeItem("token");
-        navigate("/");
-    }
+    const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+    const [createEventDate, setCreateEventDate] = useState(currentDate);
 
+    const openCreateModal = (date: Date = currentDate) => {
+        if (isCreateModalOpen) return;
+
+        setCreateEventDate(date);
+        setIsCreateModalOpen(true);
+    };
+
+    const moveCalendarDate = (direction: "next" | "previous") => {
+        setCurrentDate((previousDate) => {
+            const newDate = new Date(previousDate);
+
+            if (view === "month") {
+                newDate.setDate(1);
+                newDate.setMonth(
+                    newDate.getMonth() + (direction === "next" ? 1 : -1)
+                );
+            } else if (view === "week") {
+                newDate.setDate(
+                    newDate.getDate() + (direction === "next" ? 7 : -7)
+                );
+            } else if (view === "day") {
+                newDate.setDate(
+                    newDate.getDate() + (direction === "next" ? 1 : -1)
+                );
+            }
+
+            return newDate;
+        });
+        
+    };
 
     const refreshEvents = async () => {
         try {
@@ -78,19 +105,34 @@ function Calendar(calendarProps: CalendarProps) {
                     currentDate={currentDate}
                     setView={setView}
                     setCurrentDate={setCurrentDate}
+                    moveCalendarDate={moveCalendarDate}
                 />
             </div>
 
             <div className="calendar-content">
-                < CalendarSidebar 
+                < Sidebar 
                     view={view} 
                     currentDate={currentDate}
                     setCurrentDate={setCurrentDate}
-                    onCreateEvent={handleCreateEvent}
+                    onOpenCreateModal={() => openCreateModal()}
                 />
 
-                < FullCalendar view={view} currentDate={currentDate} events={events} />
+                < FullCalendar 
+                    view={view}
+                    currentDate={currentDate} 
+                    events={events} 
+                    onOpenCreateModal={() => openCreateModal()}
+                    moveCalendarDate={moveCalendarDate}
+                />
             </div>
+
+            {isCreateModalOpen && (
+                <CreateEventModal
+                    currentDate={createEventDate}
+                    onClose={() => setIsCreateModalOpen(false)}
+                    onCreateEvent={handleCreateEvent}
+                />
+            )}
         </div>
     )
 }

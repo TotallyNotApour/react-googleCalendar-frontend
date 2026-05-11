@@ -13,40 +13,13 @@ interface TaskbarProps {
     currentDate: Date;
     setView: React.Dispatch<React.SetStateAction<CalendarView>>;
     setCurrentDate: React.Dispatch<React.SetStateAction<Date>>
+    moveCalendarDate: (direction: "next" | "previous") => void;
 }
 
-function Taskbar({ email, view, currentDate, setView, setCurrentDate }: TaskbarProps) {
+function Taskbar({ email, view, currentDate, setView, setCurrentDate, moveCalendarDate }: TaskbarProps) {
 
     const handleToday = () => {
         setCurrentDate(new Date());
-    }
-
-    const goNext = () => {
-        const newDate = new Date(currentDate);
-        if (view === "month") {
-            newDate.setDate(1);
-            newDate.setMonth(newDate.getMonth() + 1);
-        } else if (view === "week") {
-            newDate.setDate(newDate.getDate() + 7);
-        } else if (view === "day") {
-            newDate.setDate(newDate.getDate() + 1);
-        }
-
-        setCurrentDate(newDate);
-    }
-
-    const goPrevious = () => {
-        const newDate = new Date(currentDate);
-        if (view === "month") {
-            newDate.setDate(1);
-            newDate.setMonth(newDate.getMonth() - 1);
-        } else if (view === "week") {
-            newDate.setDate(newDate.getDate() - 7);
-        } else if (view === "day") {
-            newDate.setDate(newDate.getDate() - 1);
-        }
-
-        setCurrentDate(newDate);
     }
 
     return (
@@ -59,8 +32,8 @@ function Taskbar({ email, view, currentDate, setView, setCurrentDate }: TaskbarP
             </button>
 
             <div className="taskbar-button-card">
-                <ChevronLeft className="taskbar-arrow-button" onClick={goPrevious}/>
-                <ChevronRight className="taskbar-arrow-button" onClick={goNext}/>
+                <ChevronLeft className="taskbar-arrow-button" onClick={() => moveCalendarDate("previous")}/>
+                <ChevronRight className="taskbar-arrow-button" onClick={() => moveCalendarDate("next")}/>
             </div>
             
 
@@ -68,7 +41,8 @@ function Taskbar({ email, view, currentDate, setView, setCurrentDate }: TaskbarP
                 {currentDate.toLocaleDateString("fr-CA", {
                     month: "long",
                     year: "numeric",
-                })}
+                })
+                .replace(/^\w/, (c) => c.toUpperCase())}
             </h1>
 
             <div className="taskbar-right-section">
