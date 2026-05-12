@@ -4,4 +4,5 @@ export interface CalendarViewProps {
     currentDate: Date;
     events: CalendarEvent[];
     onOpenCreateModal: (date: Date) => void;
+    openEventDetails: (event: CalendarEvent) => void;
 }

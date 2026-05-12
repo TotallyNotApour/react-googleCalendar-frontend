@@ -9,7 +9,7 @@ interface CalendarDay {
     events: CalendarEvent[];
 }
 
-function MonthView({ currentDate, events, onOpenCreateModal }: CalendarViewProps) {
+function MonthView({ currentDate, events, onOpenCreateModal, openEventDetails }: CalendarViewProps) {
     const year = currentDate.getFullYear();
     const month = currentDate.getMonth();
 
@@ -62,7 +62,7 @@ function MonthView({ currentDate, events, onOpenCreateModal }: CalendarViewProps
     }
 
     const handleEventClick = (event: CalendarEvent) => {
-        alert(`Event: ${event.title}\nDescription: ${event.description}`);
+        openEventDetails?.(event);
     }
 
     const handleDayClick = (date: Date) => {

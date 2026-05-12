@@ -10,7 +10,7 @@ interface SidebarProps {
     view: CalendarView;
     currentDate: Date;
     setCurrentDate: React.Dispatch<React.SetStateAction<Date>>;
-    onOpenCreateModal: () => void;
+    onOpenCreateModal: (date: Date) => void;
 }
 
 function Sidebar({view, currentDate, setCurrentDate, onOpenCreateModal}: SidebarProps) {
@@ -21,7 +21,7 @@ function Sidebar({view, currentDate, setCurrentDate, onOpenCreateModal}: Sidebar
             <Tooltip title="Create">
                 <button
                     className="calendar-create-button"
-                    onClick={onOpenCreateModal}
+                    onClick={() => onOpenCreateModal(currentDate)}
                 >
                     <Plus className="calendar-add-icon" />
 

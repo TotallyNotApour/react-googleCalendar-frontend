@@ -8,14 +8,19 @@ import CreateEventModal from "../components/createEventModal/CreateEventModal";
 
 
 import { useEffect, useState  } from "react";
+import { useNavigate } from "react-router-dom";
+import { ApiError } from "../services/api";
 import { createEvent, getEventsByDateRange } from "../services/eventService";
+import { DetailEventModal } from "../components/detailEventModal/DetailEventModal";
 
 interface CalendarProps {
     email: string | null;
+    onLogout: () => void;
 }
 type CalendarView = "month" | "week" | "day";
 
 function Calendar(calendarProps: CalendarProps) {
+    const navigate = useNavigate();
     const [view, setView] = useState<CalendarView>("month");
     const [currentDate, setCurrentDate] = useState(new Date())
     const [events, setEvents] = useState<CalendarEvent[]>([]);
@@ -23,11 +28,38 @@ function Calendar(calendarProps: CalendarProps) {
     const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
     const [createEventDate, setCreateEventDate] = useState(currentDate);
 
-    const openCreateModal = (date: Date = currentDate) => {
+    const [isOpenEventDetails, setIsOpenEventDetails] = useState(false);
+    const [openEventDetails, setOpenEventDetails] = useState<CalendarEvent | null>(null);
+
+
+    const openCreateModal = (date: Date) => {
         if (isCreateModalOpen) return;
 
         setCreateEventDate(date);
         setIsCreateModalOpen(true);
+    };
+
+    const handleOpenEventDetails = (event: CalendarEvent) => {
+        console.log("Opening event details for:", event);
+
+        setOpenEventDetails(event);
+        setIsOpenEventDetails(true);
+    };
+
+    const logoutAndReturnToLogin = () => {
+        localStorage.removeItem("token");
+        calendarProps.onLogout();
+        navigate("/", { replace: true });
+    };
+
+    const handleApiError = (error: unknown, message: string) => {
+        if (error instanceof ApiError && error.status === 401) {
+            console.error("Unauthorized. Logging out:", error);
+            logoutAndReturnToLogin();
+            return;
+        }
+
+        console.error(message, error);
     };
 
     const moveCalendarDate = (direction: "next" | "previous") => {
@@ -77,7 +109,7 @@ function Calendar(calendarProps: CalendarProps) {
             console.log("Fetched events:", eventsData);
             setEvents(eventsData);
         } catch (error) {
-            console.error("Failed to refresh events:", error);
+            handleApiError(error, "Failed to refresh events:");
         }
     };
 
@@ -90,11 +122,21 @@ function Calendar(calendarProps: CalendarProps) {
             await createEvent(newEvent);
             await refreshEvents();
         } catch (error) {
-            console.error("Failed to create event:", error);
+            handleApiError(error, "Failed to create event:");
         }
     };
 
+    const handleDeleteEvent = async (id: string) => {
+        console.log("Deleting event with ID:", id);
+    };
 
+    const handleUpdateEvent = async (updatedEvent: CalendarEvent) => {
+        console.log("Updating event:", updatedEvent);
+    };
+
+    const handleCopyEvent = async (eventToCopy: CalendarEvent) => {
+        console.log("Copying event:", eventToCopy);
+    };
     
     return (
         <div className="calendar-page">
@@ -114,15 +156,16 @@ function Calendar(calendarProps: CalendarProps) {
                     view={view} 
                     currentDate={currentDate}
                     setCurrentDate={setCurrentDate}
-                    onOpenCreateModal={() => openCreateModal()}
+                    onOpenCreateModal={openCreateModal}
                 />
 
                 < FullCalendar 
                     view={view}
                     currentDate={currentDate} 
                     events={events} 
-                    onOpenCreateModal={() => openCreateModal()}
+                    onOpenCreateModal={openCreateModal}
                     moveCalendarDate={moveCalendarDate}
+                    openEventDetails={handleOpenEventDetails}
                 />
             </div>
 
@@ -131,6 +174,16 @@ function Calendar(calendarProps: CalendarProps) {
                     currentDate={createEventDate}
                     onClose={() => setIsCreateModalOpen(false)}
                     onCreateEvent={handleCreateEvent}
+                />
+            )}
+
+            {isOpenEventDetails && (
+                <DetailEventModal
+                    onClose={() => setIsOpenEventDetails(false)}
+                    onDelete={handleDeleteEvent}
+                    onUpdate={handleUpdateEvent}
+                    onCopy={handleCopyEvent}
+                    event={openEventDetails}
                 />
             )}
         </div>

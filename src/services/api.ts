@@ -1,5 +1,15 @@
 const API_URL = "http://localhost:5000";
 
+export class ApiError extends Error {
+    status: number;
+
+    constructor(message: string, status: number) {
+        super(message);
+        this.name = "ApiError";
+        this.status = status;
+    }
+}
+
 export async function apiFetch(path: string, options: RequestInit = {}) {
     const token = localStorage.getItem("token");
 
@@ -13,7 +23,7 @@ export async function apiFetch(path: string, options: RequestInit = {}) {
     });
 
     if (!response.ok) {
-        throw new Error("API request failed");
+        throw new ApiError("API request failed", response.status);
     }
     console.log("API response:", await response.clone().json());
     return response.json();

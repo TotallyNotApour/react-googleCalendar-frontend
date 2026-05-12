@@ -1,5 +1,5 @@
 import Draggable from "react-draggable";
-import { useRef, useState} from "react";
+import { useEffect, useRef, useState} from "react";
 import { Clock, MapPin, AlignLeft, Palette, X } from "lucide-react";
 
 import dayjs, { Dayjs } from "dayjs";
@@ -70,6 +70,24 @@ function CreateEventModal({ currentDate, onClose, onCreateEvent}: CreateEventMod
 
 
     const [formErrors, setFormErrors] = useState<EventFormErrors>({});
+
+    useEffect(() => {
+        const handlePointerDown = (event: PointerEvent) => {
+            const target = event.target;
+
+            if (!(target instanceof Element)) return;
+            if (nodeRef.current?.contains(target)) return;
+            if (target.closest(".MuiPopover-root, .MuiPopper-root, .MuiModal-root")) return;
+
+            onClose();
+        };
+
+        document.addEventListener("pointerdown", handlePointerDown);
+
+        return () => {
+            document.removeEventListener("pointerdown", handlePointerDown);
+        };
+    }, [onClose]);
 
     const handleSave = async () => {
         if (isSaving) return;

@@ -55,7 +55,7 @@ function ViewDropdown({ view, setView }: Props) {
 
                     borderRadius: "999px",
 
-                    padding: "10px 36px",
+                    padding: "8px 30px",
 
                     margin: "0px 10px",
 

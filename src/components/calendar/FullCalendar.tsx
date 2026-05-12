@@ -14,9 +14,10 @@ type FullCalendarProps = {
     events: CalendarEvent[];
     onOpenCreateModal: (date: Date) => void;
     moveCalendarDate: (direction: "next" | "previous") => void;
+    openEventDetails: (event: CalendarEvent) => void;
 };
 
-function FullCalendar({ view, currentDate, events, onOpenCreateModal, moveCalendarDate }: FullCalendarProps) {
+function FullCalendar({ view, currentDate, events, onOpenCreateModal, moveCalendarDate, openEventDetails }: FullCalendarProps) {
     
     const wheelCooldownRef = useRef(false);
     const handleWheel = (event: React.WheelEvent<HTMLDivElement>) => {
@@ -44,6 +45,7 @@ function FullCalendar({ view, currentDate, events, onOpenCreateModal, moveCalend
                         currentDate={currentDate}
                         events={events}
                         onOpenCreateModal={onOpenCreateModal}
+                        openEventDetails={openEventDetails}
                     />
                 )}
                 {view === "week" && (
@@ -51,6 +53,7 @@ function FullCalendar({ view, currentDate, events, onOpenCreateModal, moveCalend
                         currentDate={currentDate}
                         events={events}
                         onOpenCreateModal={onOpenCreateModal}
+                        openEventDetails={openEventDetails}
                     />
                 )}
                     
@@ -59,6 +62,7 @@ function FullCalendar({ view, currentDate, events, onOpenCreateModal, moveCalend
                         currentDate={currentDate}
                         events={events}
                         onOpenCreateModal={onOpenCreateModal}
+                        openEventDetails={openEventDetails}
                     />
                 )}
             </div>

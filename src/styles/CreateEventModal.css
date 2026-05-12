@@ -13,13 +13,13 @@
 
     transform: translate(-50%, -50%);
 
-    animation: modal-pop 0.18s ease-out;
+    animation: modal-pop 0.16s ease-out;
 }
 
 @keyframes modal-pop {
     0% {
         opacity: 0;
-        transform: scale(0.92);
+        transform: scale(0.96);
     }
     100% {
         opacity: 1;
