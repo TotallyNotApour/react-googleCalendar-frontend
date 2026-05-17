@@ -14,7 +14,7 @@ type FullCalendarProps = {
     events: CalendarEvent[];
     onOpenCreateModal: (date: Date) => void;
     moveCalendarDate: (direction: "next" | "previous") => void;
-    openEventDetails: (event: CalendarEvent) => void;
+    openEventDetails: (event: CalendarEvent, anchorEl: HTMLElement | null) => void;
 };
 
 function FullCalendar({ view, currentDate, events, onOpenCreateModal, moveCalendarDate, openEventDetails }: FullCalendarProps) {

@@ -10,7 +10,7 @@ import CreateEventModal from "../components/createEventModal/CreateEventModal";
 import { useEffect, useState  } from "react";
 import { useNavigate } from "react-router-dom";
 import { ApiError } from "../services/api";
-import { createEvent, getEventsByDateRange } from "../services/eventService";
+import { createEvent, getEventsByDateRange, deleteEvent } from "../services/eventService";
 import { DetailEventModal } from "../components/detailEventModal/DetailEventModal";
 
 interface CalendarProps {
@@ -28,7 +28,7 @@ function Calendar(calendarProps: CalendarProps) {
     const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
     const [createEventDate, setCreateEventDate] = useState(currentDate);
 
-    const [isOpenEventDetails, setIsOpenEventDetails] = useState(false);
+    const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
     const [openEventDetails, setOpenEventDetails] = useState<CalendarEvent | null>(null);
 
 
@@ -39,11 +39,14 @@ function Calendar(calendarProps: CalendarProps) {
         setIsCreateModalOpen(true);
     };
 
-    const handleOpenEventDetails = (event: CalendarEvent) => {
-        console.log("Opening event details for:", event);
-
+    const handleOpenEventDetails = (event: CalendarEvent, anchorEl: HTMLElement | null) => {
         setOpenEventDetails(event);
-        setIsOpenEventDetails(true);
+        setAnchorEl(anchorEl);
+    };
+
+    const handleCloseEventDetails = () => {
+        setOpenEventDetails(null);
+        setAnchorEl(null);
     };
 
     const logoutAndReturnToLogin = () => {
@@ -128,14 +131,23 @@ function Calendar(calendarProps: CalendarProps) {
 
     const handleDeleteEvent = async (id: string) => {
         console.log("Deleting event with ID:", id);
+                try {
+            await deleteEvent(id);
+            await refreshEvents();
+        } catch (error) {
+            handleApiError(error, "Failed to delete event:");
+        }
+        handleCloseEventDetails();
     };
 
     const handleUpdateEvent = async (updatedEvent: CalendarEvent) => {
         console.log("Updating event:", updatedEvent);
+        handleCloseEventDetails();
     };
 
     const handleCopyEvent = async (eventToCopy: CalendarEvent) => {
         console.log("Copying event:", eventToCopy);
+        handleCloseEventDetails();
     };
     
     return (
@@ -177,15 +189,14 @@ function Calendar(calendarProps: CalendarProps) {
                 />
             )}
 
-            {isOpenEventDetails && (
-                <DetailEventModal
-                    onClose={() => setIsOpenEventDetails(false)}
-                    onDelete={handleDeleteEvent}
-                    onUpdate={handleUpdateEvent}
-                    onCopy={handleCopyEvent}
-                    event={openEventDetails}
-                />
-            )}
+            <DetailEventModal
+                event={openEventDetails}
+                anchorEl={anchorEl}
+                onClose={handleCloseEventDetails}
+                onDelete={handleDeleteEvent}
+                onUpdate={handleUpdateEvent}
+                onCopy={handleCopyEvent}
+            />
         </div>
     )
 }

@@ -61,8 +61,8 @@ function MonthView({ currentDate, events, onOpenCreateModal, openEventDetails }:
         alert("Show more events for this day");
     }
 
-    const handleEventClick = (event: CalendarEvent) => {
-        openEventDetails?.(event);
+    const handleEventClick = (event: CalendarEvent, anchorEl: HTMLElement | null) => {
+        openEventDetails?.(event, anchorEl);
     }
 
     const handleDayClick = (date: Date) => {
@@ -111,7 +111,10 @@ function MonthView({ currentDate, events, onOpenCreateModal, openEventDetails }:
                                         <div
                                             key={index}
                                             className={eventClass}
-                                            onClick={() => handleEventClick(event)}
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                handleEventClick(event, e.currentTarget);
+                                            }}
                                             style={
                                                 isAllDay
                                                     ? { backgroundColor: event.color }

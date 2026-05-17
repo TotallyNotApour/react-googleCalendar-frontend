@@ -56,6 +56,7 @@ function CreateEventModal({ currentDate, onClose, onCreateEvent}: CreateEventMod
     const [selectedColor, setSelectedColor] = useState(colors[0]);
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
+    const [location, setLocation] = useState("");
     const [eventDate, setEventDate] = useState<Dayjs | null>(dayjs(currentDate));
     const [isAllDay, setIsAllDay] = useState(false);
     const [allDayStartDate, setAllDayStartDate] = useState<Dayjs | null>(dayjs(currentDate));
@@ -154,6 +155,7 @@ function CreateEventModal({ currentDate, onClose, onCreateEvent}: CreateEventMod
         const newEvent: CalendarEvent = {
             title : title || "Untitled Event",
             description,
+            location,
             startDate,
             endDate,
             allDay: isAllDay,
@@ -332,8 +334,10 @@ function CreateEventModal({ currentDate, onClose, onCreateEvent}: CreateEventMod
                         <div className="event-row">
                             <MapPin className="event-row-icon" />
                             <input
-                                className="event-row-input"
+                                className="event-location-input"
                                 placeholder="Add location"
+                                value={location}
+                                onChange={(e) => setLocation(e.target.value)}
                             />
                         </div>
 

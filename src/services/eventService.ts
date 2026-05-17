@@ -17,3 +17,9 @@ export async function createEvent(event: CalendarEvent) {
         body: JSON.stringify(event),
     });
 }
+
+export async function deleteEvent(id: string) {
+    return apiFetch(`/api/events/delete/${id}`, {
+        method: "DELETE",
+    });
+}

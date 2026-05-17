@@ -115,6 +115,7 @@
 }
 
 .event-row-input,
+.event-location-input,
 .event-description-input,
 .event-row-content input {
     border: none;
