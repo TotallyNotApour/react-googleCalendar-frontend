@@ -21,7 +21,14 @@
 .event-detail-actions {
     display: flex;
     gap: 2px;
+}
 
+.event-button {
+    color: #5f6368;
+}
+
+.event-detail-text {
+    color: var(--text-color);
 }
 
 .event-detail-section {

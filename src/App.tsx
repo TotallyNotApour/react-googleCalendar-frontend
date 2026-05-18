@@ -4,6 +4,7 @@ import Register from "./pages/Register";
 import Calendar from "./pages/Calendar";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { useState } from "react";
+import { EditEvent } from "./pages/EditEvent";
 
 
 
@@ -21,6 +22,16 @@ function App() {
         <Route path="/calendar" element={
             <ProtectedRoute>
               <Calendar email={email} onLogout={handleLogout}/>
+            </ProtectedRoute>
+        } />
+        <Route path="/calendar/copy/:id" element={
+            <ProtectedRoute>
+              <EditEvent email={email} onLogout={handleLogout}/>
+            </ProtectedRoute>
+        } />
+        <Route path="/calendar/edit/:id" element={
+            <ProtectedRoute>
+              <EditEvent email={email} onLogout={handleLogout}/>
             </ProtectedRoute>
         } />
     </Routes>

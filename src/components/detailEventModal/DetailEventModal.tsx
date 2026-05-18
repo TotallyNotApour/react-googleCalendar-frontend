@@ -65,7 +65,7 @@ export function DetailEventModal({
                                 size="small"
                                 onClick={() => event && onCopy(event)}
                             >
-                                <Clipboard size={25} />
+                                <Clipboard size={25} className="event-button"/>
                             </IconButton>
                         </Tooltip>
 
@@ -74,7 +74,7 @@ export function DetailEventModal({
                                 size="small"
                                 onClick={() => event && onUpdate(event)}
                             >
-                                <Pencil size={25} />
+                                <Pencil size={25} className="event-button"/>
                             </IconButton>
                         </Tooltip>
 
@@ -83,7 +83,7 @@ export function DetailEventModal({
                                 size="small"
                                 onClick={() => event?._id && onDelete(event._id)}
                             >
-                                <Trash size={25} />
+                                <Trash size={25} className="event-button"/>
                             </IconButton>
                         </Tooltip>
 
@@ -92,7 +92,7 @@ export function DetailEventModal({
                                 size="small"
                                 onClick={onClose}
                             >
-                                <X size={25} />
+                                <X size={25} className="event-button"/>
                             </IconButton>
                         </Tooltip>
                         
@@ -102,9 +102,9 @@ export function DetailEventModal({
                 </div>
 
                 <div className="event-detail-section">
-                    <CalendarDays size={18} />
+                    <CalendarDays size={18} className="event-button"/>
 
-                    <span>
+                    <span className="event-detail-text">
                         {event?.startDate.toLocaleDateString("fr-CA", {
                             weekday: "long",
                             day: "numeric",
@@ -116,9 +116,9 @@ export function DetailEventModal({
 
                 {!event?.allDay && (
                     <div className="event-detail-section">
-                        <Clock3 size={18} />
+                        <Clock3 size={18} className="event-button" />
 
-                        <span>
+                        <span className="event-detail-text">
                             {event?.startDate.toLocaleTimeString([], {
                                 hour: "2-digit",
                                 minute: "2-digit",
@@ -134,7 +134,7 @@ export function DetailEventModal({
 
                 {event?.location && (
                     <div className="event-detail-section">
-                        <MapPin size={18} />
+                        <MapPin size={18} className="event-button" />
                         <Tooltip title={event?.location || ""}>
                             <span className="event-detail-location">
                                 {event.location}
@@ -145,9 +145,9 @@ export function DetailEventModal({
 
                 {event?.recurrence?.frequency !== "none" && (
                     <div className="event-detail-section">
-                        <Repeat size={18} />
+                        <Repeat size={18} className="event-button" />
 
-                        <span>
+                        <span className="event-detail-text">
                             Repeats {event?.recurrence?.frequency}
                         </span>
                     </div>
