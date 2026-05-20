@@ -21,7 +21,7 @@ export async function apiFetch(path: string, options: RequestInit = {}) {
             ...options.headers,
         },
     });
-
+    
     if (!response.ok) {
         throw new ApiError("API request failed", response.status);
     }

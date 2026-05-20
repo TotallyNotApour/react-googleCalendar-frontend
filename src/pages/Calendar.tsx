@@ -142,11 +142,13 @@ function Calendar(calendarProps: CalendarProps) {
 
     const handleUpdateEvent = async (updatedEvent: CalendarEvent) => {
         console.log("Updating event:", updatedEvent);
+        navigate(`/calendar/edit/${updatedEvent._id}`);
         handleCloseEventDetails();
     };
 
     const handleCopyEvent = async (eventToCopy: CalendarEvent) => {
         console.log("Copying event:", eventToCopy);
+        navigate(`/calendar/copy/${eventToCopy._id}`);
         handleCloseEventDetails();
     };
     

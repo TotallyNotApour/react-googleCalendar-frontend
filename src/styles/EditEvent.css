@@ -1,0 +1,165 @@
+.edit-event-page {
+    min-height: 100vh;
+    background-color: var(--background-color);
+
+    display: flex;
+    justify-content: center;
+
+    padding: 4rem 1rem;
+}
+
+.edit-event-card {
+    width: 100%;
+    max-width: 720px;
+
+    background-color: white;
+
+    border-radius: 28px;
+    padding: 2rem;
+
+    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.16);
+}
+
+.edit-event-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    margin-bottom: 2rem;
+}
+
+.edit-event-header h1 {
+    margin: 0;
+
+    color: #5f6368;
+    font-size: 2rem;
+    font-weight: 500;
+}
+
+.edit-event-close-button {
+    border: none;
+    background: transparent;
+
+    font-size: 2rem;
+
+    width: 42px;
+    height: 42px;
+
+    border-radius: 50%;
+
+    cursor: pointer;
+}
+
+.edit-event-close-button:hover {
+    background-color: gainsboro;
+}
+
+.edit-event-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+}
+
+.edit-event-title {
+    border: none;
+    border-bottom: 2px solid #d7d7d7;
+
+    font-size: 1.8rem;
+    font-family: "Google Sans Flex";
+
+    padding: 0.5rem 0;
+
+    outline: none;
+}
+
+.edit-event-title:focus {
+    border-bottom-color: var(--primary-color);
+}
+
+.edit-event-row {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.edit-event-row label {
+    min-width: 90px;
+
+    color: #5f6368;
+    font-weight: 500;
+}
+
+.edit-event-row input,
+.edit-event-row select {
+    font-family: "Google Sans Flex";
+    font-size: 1rem;
+
+    padding: 0.7rem 0.9rem;
+
+    border: 1px solid #d7d7d7;
+    border-radius: 14px;
+
+    outline: none;
+}
+
+.edit-event-row input:focus,
+.edit-event-row select:focus,
+.edit-event-description:focus {
+    border-color: var(--primary-color);
+}
+
+.edit-event-description {
+    min-height: 130px;
+
+    resize: vertical;
+
+    font-family: "Google Sans Flex";
+    font-size: 1rem;
+
+    padding: 1rem;
+
+    border: 1px solid #d7d7d7;
+    border-radius: 18px;
+
+    outline: none;
+}
+
+.edit-event-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+
+    margin-top: 1rem;
+}
+
+.edit-event-cancel,
+.edit-event-save {
+    border: none;
+    border-radius: 999px;
+
+    padding: 0.8rem 1.6rem;
+
+    font-family: "Google Sans Flex";
+    font-size: 1rem;
+    font-weight: 500;
+
+    cursor: pointer;
+}
+
+.edit-event-cancel {
+    background-color: transparent;
+    color: #5f6368;
+}
+
+.edit-event-cancel:hover {
+    background-color: gainsboro;
+}
+
+.edit-event-save {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.edit-event-save:hover {
+    background-color: var(--primary-color-hover);
+}

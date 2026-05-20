@@ -11,6 +11,12 @@ export async function getEventsByDateRange(start: Date, end: Date) {
     );
 }
 
+export async function getEventById(id: string) {
+    return apiFetch(`/api/events/get/${id}`, {
+        method: "GET",
+    });
+}
+
 export async function createEvent(event: CalendarEvent) {
     return apiFetch("/api/events/add", {
         method: "POST",
