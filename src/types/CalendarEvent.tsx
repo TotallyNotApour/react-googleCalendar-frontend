@@ -1,0 +1,16 @@
+export interface CalendarEvent {
+    _id?: string;
+    title: string;
+    description: string;
+    location: string;
+    startDate: Date;
+    endDate: Date;
+    allDay: boolean;
+    color: string;
+    recurrence: {
+        frequency: "none" | "daily" | "weekly" | "monthly" | "yearly";
+        interval: number;
+        firstOccurence?: Date;
+        until?: Date;
+    };
+}

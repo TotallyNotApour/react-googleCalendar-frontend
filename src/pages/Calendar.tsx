@@ -1,41 +1,207 @@
+import "../styles/Calendar.css";
+import Sidebar from "../components/sidebar/Sidebar"
+import FullCalendar from "../components/calendar/FullCalendar"
+import Taskbar from "../components/taskbar/Taskbar"
+import type {CalendarEvent} from "../types/CalendarEvent"
+import { getDateRange } from "../utils/GetRangeDate"
+import CreateEventModal from "../components/createEventModal/CreateEventModal";
+
+
+import { useEffect, useState  } from "react";
 import { useNavigate } from "react-router-dom";
+import { ApiError } from "../services/api";
+import { createEvent, getEventsByDateRange, deleteEvent } from "../services/eventService";
+import { DetailEventModal } from "../components/detailEventModal/DetailEventModal";
 
-function Calendar() {
+interface CalendarProps {
+    email: string | null;
+    onLogout: () => void;
+}
+type CalendarView = "month" | "week" | "day";
 
+function Calendar(calendarProps: CalendarProps) {
     const navigate = useNavigate();
+    const [view, setView] = useState<CalendarView>("month");
+    const [currentDate, setCurrentDate] = useState(new Date())
+    const [events, setEvents] = useState<CalendarEvent[]>([]);
 
-    const handleLogout = () => {
+    const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+    const [createEventDate, setCreateEventDate] = useState(currentDate);
+
+    const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
+    const [openEventDetails, setOpenEventDetails] = useState<CalendarEvent | null>(null);
+
+
+    const openCreateModal = (date: Date) => {
+        if (isCreateModalOpen) return;
+
+        setCreateEventDate(date);
+        setIsCreateModalOpen(true);
+    };
+
+    const handleOpenEventDetails = (event: CalendarEvent, anchorEl: HTMLElement | null) => {
+        setOpenEventDetails(event);
+        setAnchorEl(anchorEl);
+    };
+
+    const handleCloseEventDetails = () => {
+        setOpenEventDetails(null);
+        setAnchorEl(null);
+    };
+
+    const logoutAndReturnToLogin = () => {
         localStorage.removeItem("token");
-        navigate("/");
-    }
+        calendarProps.onLogout();
+        navigate("/", { replace: true });
+    };
 
-    const handleTest = async () => {
-        const token = localStorage.getItem("token");
-        try {
-            const response = await fetch("http://localhost:5000/api/auth/me", {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            });
-            const data = await response.json();
-            console.log(data);
-        } catch (error) {
-            console.error("Error fetching user data:", error);
+    const handleApiError = (error: unknown, message: string) => {
+        if (error instanceof ApiError && error.status === 401) {
+            console.error("Unauthorized. Logging out:", error);
+            logoutAndReturnToLogin();
+            return;
         }
+
+        console.error(message, error);
+    };
+
+    const moveCalendarDate = (direction: "next" | "previous") => {
+        setCurrentDate((previousDate) => {
+            const newDate = new Date(previousDate);
+
+            if (view === "month") {
+                newDate.setDate(1);
+                newDate.setMonth(
+                    newDate.getMonth() + (direction === "next" ? 1 : -1)
+                );
+            } else if (view === "week") {
+                newDate.setDate(
+                    newDate.getDate() + (direction === "next" ? 7 : -7)
+                );
+            } else if (view === "day") {
+                newDate.setDate(
+                    newDate.getDate() + (direction === "next" ? 1 : -1)
+                );
+            }
+
+            return newDate;
+        });
+        
+    };
+
+    const refreshEvents = async () => {
+        try {
+            const { start, end } = getDateRange(currentDate, view);
+            const data = await getEventsByDateRange(start, end);
+
+            const eventsData: CalendarEvent[] = data.fullEvents.map((event: CalendarEvent) => ({
+                ...event,
+                startDate: new Date(event.startDate),
+                endDate: new Date(event.endDate),
+                recurrence: {
+                    ...event.recurrence,
+                    firstOccurence: event.recurrence.firstOccurence
+                        ? new Date(event.recurrence.firstOccurence)
+                        : undefined,
+                    until: event.recurrence.until
+                        ? new Date(event.recurrence.until)
+                        : undefined,
+                },
+            }));
+
+            console.log("Fetched events:", eventsData);
+            setEvents(eventsData);
+        } catch (error) {
+            handleApiError(error, "Failed to refresh events:");
+        }
+    };
+
+    useEffect(() => {
+        refreshEvents();
+    }, [currentDate, view]);
+
+    const handleCreateEvent = async (newEvent: CalendarEvent) => {
+        try {
+            await createEvent(newEvent);
+            await refreshEvents();
+        } catch (error) {
+            handleApiError(error, "Failed to create event:");
+        }
+    };
+
+    const handleDeleteEvent = async (id: string) => {
+        console.log("Deleting event with ID:", id);
+                try {
+            await deleteEvent(id);
+            await refreshEvents();
+        } catch (error) {
+            handleApiError(error, "Failed to delete event:");
+        }
+        handleCloseEventDetails();
+    };
+
+    const handleUpdateEvent = async (updatedEvent: CalendarEvent) => {
+        console.log("Updating event:", updatedEvent);
+        navigate(`/calendar/edit/${updatedEvent._id}`);
+        handleCloseEventDetails();
+    };
+
+    const handleCopyEvent = async (eventToCopy: CalendarEvent) => {
+        console.log("Copying event:", eventToCopy);
+        navigate(`/calendar/copy/${eventToCopy._id}`);
+        handleCloseEventDetails();
     };
     
     return (
-        <div>
-            <h1>Calendar Page</h1>
-            <button onClick={handleLogout}>
-                Logout
-            </button>
+        <div className="calendar-page">
+            <div className="calendar-taskbar">
+                <Taskbar
+                    email={calendarProps.email}
+                    view={view}
+                    currentDate={currentDate}
+                    setView={setView}
+                    setCurrentDate={setCurrentDate}
+                    moveCalendarDate={moveCalendarDate}
+                />
+            </div>
 
-            <button onClick={handleTest}>
-                test
-            </button>
+            <div className="calendar-content">
+                < Sidebar 
+                    view={view} 
+                    currentDate={currentDate}
+                    setCurrentDate={setCurrentDate}
+                    onOpenCreateModal={openCreateModal}
+                />
+
+                < FullCalendar 
+                    view={view}
+                    currentDate={currentDate} 
+                    events={events} 
+                    onOpenCreateModal={openCreateModal}
+                    moveCalendarDate={moveCalendarDate}
+                    openEventDetails={handleOpenEventDetails}
+                />
+            </div>
+
+            {isCreateModalOpen && (
+                <CreateEventModal
+                    currentDate={createEventDate}
+                    onClose={() => setIsCreateModalOpen(false)}
+                    onCreateEvent={handleCreateEvent}
+                />
+            )}
+
+            <DetailEventModal
+                event={openEventDetails}
+                anchorEl={anchorEl}
+                onClose={handleCloseEventDetails}
+                onDelete={handleDeleteEvent}
+                onUpdate={handleUpdateEvent}
+                onCopy={handleCopyEvent}
+            />
         </div>
     )
 }
+
 
 export default Calendar

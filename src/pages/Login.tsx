@@ -1,8 +1,12 @@
 import { useState } from "react";
 import { Link, useNavigate  } from "react-router-dom";
+import "../styles/Login.css";
 
-function Login() {
-    const [email, setEmail] = useState("");
+interface LoginProps {
+    setEmail: (email:string | null) => void;
+    email: string | null;
+}
+function Login({email, setEmail}: LoginProps) {
     const [password, setPassword] = useState("");
 
     const navigate = useNavigate();
@@ -33,35 +37,41 @@ function Login() {
     }
 
     return (
-        <div>
-            <div>
-                <h1>Login</h1>
+        <div className="login-page">
+            <div className="login-card">
+                <div className="login-title-container">
+                    <h1 className="login-title">
+                        Sign in
+                    </h1>
+                    <h1 className="login-subtitle">
+                        to continue to your Calendar
+                    </h1>
+                </div>
 
-                <form onSubmit={handleSubmit}> 
-                    <input
-                        type="email"
-                        placeholder="Email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                    />
-
-                    <br/>
-
-                    <input
-                        type="password"
-                        placeholder="Password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                    />
-                    
-                    <br />
-
-                    <button type="submit">Login</button>
-                </form>
+                <div className="login-content">
+                    <form onSubmit={handleSubmit} className="login-form"> 
+                        <input
+                            type="email"
+                            placeholder="Email"
+                            value={email??""}
+                            onChange={(e) => setEmail(e.target.value)}
+                        />
+                        <input
+                            type="password"
+                            placeholder="Password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                        />
+                        <button type="submit" className="form-button">
+                            Login
+                        </button>
+                    </form>
+                    <Link className="form-link" to="/register">
+                        Don't have an account? Register here.
+                    </Link>
+                </div>
             </div>
-            <div>
-                <Link to="/register">Don't have an account? Register here.</Link>
-            </div>
+                
         </div>
 
         

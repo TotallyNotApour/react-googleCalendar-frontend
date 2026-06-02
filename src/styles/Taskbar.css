@@ -1,0 +1,173 @@
+.taskbar-card {
+    display: flex;
+    align-items: center;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    overflow: hidden;
+    padding: 0rem 1rem;
+}
+
+
+.taskbar-menu-icon {
+    margin: 0.5rem;
+    cursor: pointer;
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+}
+
+.taskbar-title {
+    font-size: 1.2rem;
+    padding: 0.5rem;
+    margin: 0 4rem 0 0;
+    flex-shrink: 0;
+}
+
+.taskbar-button-today {
+    background-color: transparent;
+    font-family: 'Google Sans Flex';
+    color: var(--text-color);
+    
+    border: 1px solid var(--text-color);
+    border-radius: 999px;
+
+    padding: 10px 30px;
+    margin: 8px 25px;
+
+    font-size: 18px;
+    font-weight: 500;
+
+    cursor: pointer;
+
+    transition:
+        background-color 0.2s ease,
+        box-shadow 0.2s ease,
+        transform 0.1s ease;
+
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+}
+
+
+.taskbar-button-today:hover {
+    background-color: rgb(220, 220, 220);
+}
+
+.taskbar-button-today:active {
+    transform: scale(0.98);
+}
+
+.taskbar-button-card {
+    flex-shrink: 0;
+}
+.taskbar-arrow-button {
+    cursor: pointer;
+    width: 24px;
+    height: 24px;
+
+    padding: 6px;
+
+    border-radius: 50%;
+    user-select: none;
+    transition: background-color 0.2s ease;
+}
+
+.taskbar-arrow-button:hover {
+    background-color: rgba(57, 57, 57, 0.08);
+}
+
+.taskbar-month-year {
+    margin: 0.5rem;
+    font-weight: 500;
+    font-size: 1.5em;
+    flex-shrink: 0;
+}
+
+.taskbar-right-section {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.taskbar-search-icon {
+    cursor: pointer;
+    width: 30px;
+    height: 30px;
+
+    padding: 6px;
+
+    border-radius: 50%;
+
+    transition: background-color 0.2s ease;
+}
+
+.taskbar-search-icon:hover {
+    background-color: rgba(57, 57, 57, 0.08);
+}
+
+.taskbar-select-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.taskbar-select-view {
+    background-color: transparent;
+    font-family: 'Google Sans Flex';
+    color: var(--text-color);
+    
+    border: 1px solid var(--text-color);
+    border-radius: 999px;
+
+    padding: 10px 25px;
+    margin: 0px 10px;
+
+    font-size: 18px;
+    font-weight: 500;
+
+    cursor: pointer;
+
+    transition:
+        background-color 0.2s ease,
+        box-shadow 0.2s ease,
+        transform 0.1s ease;
+
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+
+    outline: none;
+}
+
+
+.taskbar-select-view:hover {
+    background-color: gainsboro;
+}
+
+.taskbar-select-arrow {
+    position: absolute;
+
+    right: 15px;
+
+    width: 18px;
+    height: 18px;
+
+    color: var(--text-color);
+
+    pointer-events: none;
+}
+
+.taskbar-profile-initial {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--primary-color);
+    width: 18px;
+    height: 18px;
+    padding: 16px;
+    border-radius: 100%;
+    margin: 0;
+    color: white;
+}

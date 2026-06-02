@@ -1,0 +1,8 @@
+.mini-calendar {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    border-radius: 16px;
+    overflow: visible;
+}
